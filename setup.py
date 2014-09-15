@@ -3,7 +3,11 @@ import setuptools
 
 setuptools.setup(
     name="divergent",
-    version="0",
+    version="14.0",
+    description=(
+        "A DNS server which will \"override\" entries with internal Rackspace "
+        "addresses."
+    ),
     install_requires=[
         "Twisted>=14.0",
         "pyOpenSSL>=0.14",
