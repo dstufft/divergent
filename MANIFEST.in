@@ -1,0 +1,4 @@
+include README.rst
+
+include *.py
+include twisted/plugins *.py
