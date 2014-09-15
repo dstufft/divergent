@@ -20,11 +20,6 @@ _QUERY_RECORD = {
 }
 
 
-def _setattr_and_getattr(value, obj, name):
-    setattr(obj, name, value)
-    return getattr(obj, name)
-
-
 class Token(object):
 
     def __init__(self, token, expires=None, catalog=None):
@@ -89,6 +84,10 @@ class RackspaceResolver(object):
 
         return False
 
+    def _setToken(self, token):
+        self._rackspace_token = token
+        return token
+
     def _authenticateRackspace(self):
         if (self._rackspace_token is not None
                 and not self._rackspace_token.expired):
@@ -108,7 +107,7 @@ class RackspaceResolver(object):
         )
         d.addCallback(treq.content)
         d.addCallback(Token.fromJSON)
-        d.addCallback(_setattr_and_getattr, self, "_rackspace_token")
+        d.addCallback(self._setToken)
 
         return d
 
