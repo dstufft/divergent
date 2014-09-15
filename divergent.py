@@ -35,8 +35,6 @@ class Token(object):
 
     @classmethod
     def fromJSON(cls, data):
-        data = json.loads(data)
-
         return cls(
             data["access"]["token"]["id"],
             expires=data["access"]["token"]["expires"],
@@ -105,7 +103,7 @@ class RackspaceResolver(object):
             }),
             headers={"Content-Type": "application/json"},
         )
-        d.addCallback(treq.content)
+        d.addCallback(treq.json_content)
         d.addCallback(Token.fromJSON)
         d.addCallback(self._setToken)
 
@@ -118,8 +116,8 @@ class RackspaceResolver(object):
                     (endpoint["publicURL"] + "/servers/detail").encode("utf8"),
                     headers={"X-Auth-Token": [token.token]},
                 )
-                d.addCallback(treq.content)
-                d.addCallback(lambda x: json.loads(x)["servers"])
+                d.addCallback(treq.json_content)
+                d.addCallback(lambda x: x["servers"])
 
                 return d
 
